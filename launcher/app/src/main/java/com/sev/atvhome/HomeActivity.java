@@ -402,7 +402,8 @@ public class HomeActivity extends Activity {
                 if (code == KeyEvent.KEYCODE_DPAD_LEFT && topIdx > 0) topIdx--;
                 else if (code == KeyEvent.KEYCODE_DPAD_RIGHT && topIdx < pills.length - 1) topIdx++;
                 else if (code == KeyEvent.KEYCODE_DPAD_DOWN) {
-                    if (!dockApps.isEmpty()) zone = ZONE_DOCK;
+                    if (topIdx == PILL_SETTINGS) { zone = ZONE_SRC; srcIdx = 0; }   // cards sit right below it
+                    else if (!dockApps.isEmpty()) zone = ZONE_DOCK;
                     else if (!gridApps.isEmpty()) { zone = ZONE_GRID; gridIdx = 0; }
                 }
                 break;
@@ -410,9 +411,13 @@ public class HomeActivity extends Activity {
                 if (code == KeyEvent.KEYCODE_DPAD_LEFT && dockIdx > 0) dockIdx--;
                 else if (code == KeyEvent.KEYCODE_DPAD_RIGHT) {
                     if (dockIdx < dockApps.size() - 1) dockIdx++;
-                    else zone = ZONE_SRC;
+                    else { zone = ZONE_SRC; srcIdx = SOURCES.length - 1; }
                 }
-                else if (code == KeyEvent.KEYCODE_DPAD_UP) zone = ZONE_TOP;
+                else if (code == KeyEvent.KEYCODE_DPAD_UP) {
+                    // The last dock app is the one under the source cards
+                    if (dockIdx == dockApps.size() - 1) { zone = ZONE_SRC; srcIdx = SOURCES.length - 1; }
+                    else zone = ZONE_TOP;
+                }
                 else if (code == KeyEvent.KEYCODE_DPAD_DOWN && !gridApps.isEmpty()) {
                     zone = ZONE_GRID;
                     gridIdx = Math.min(dockIdx, gridApps.size() - 1);   // first row, same column
@@ -422,8 +427,13 @@ public class HomeActivity extends Activity {
                 if (code == KeyEvent.KEYCODE_DPAD_UP) {
                     if (srcIdx > 0) srcIdx--;
                     else { zone = ZONE_TOP; topIdx = PILL_SETTINGS; }
-                } else if (code == KeyEvent.KEYCODE_DPAD_DOWN && srcIdx < SOURCES.length - 1) srcIdx++;
-                else if (code == KeyEvent.KEYCODE_DPAD_LEFT && !dockApps.isEmpty()) zone = ZONE_DOCK;
+                } else if (code == KeyEvent.KEYCODE_DPAD_DOWN) {
+                    if (srcIdx < SOURCES.length - 1) srcIdx++;
+                    else if (!dockApps.isEmpty()) { zone = ZONE_DOCK; dockIdx = dockApps.size() - 1; }
+                } else if (code == KeyEvent.KEYCODE_DPAD_LEFT && !dockApps.isEmpty()) {
+                    zone = ZONE_DOCK;
+                    dockIdx = dockApps.size() - 1;
+                }
                 break;
             case ZONE_GRID: {
                 int col = gridIdx % COLUMNS, row = gridIdx / COLUMNS;
@@ -647,6 +657,7 @@ public class HomeActivity extends Activity {
     private void restoreFocusState() {
         zone = prefs.getInt("zone", ZONE_DOCK);
         if (zone == ZONE_MENU) zone = ZONE_TOP;
+        if (zone == ZONE_SRC) zone = ZONE_DOCK;   // the card index isn't saved
         topIdx = clamp(prefs.getInt("top", PILL_INPUTS), 0, pills.length - 1);
         dockIdx = prefs.getInt("dock", 0);
         savedGridPackage = prefs.getString("grid", null);

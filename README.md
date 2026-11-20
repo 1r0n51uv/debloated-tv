@@ -83,8 +83,10 @@ Remote:
   goes to the first grid row, same column.
 - **Left / Right** stop at the end of a row.
 - **Back** from the grid jumps to the dock. **Home** on the home screen also goes to the dock.
-- **Right** from the last dock app moves to the source cards (Up/Down between them, Left back
-  to the dock, Up from the first one to the pills). **OK** switches the TV to that input.
+- The source cards sit above the last dock app: **Up** from it (or **Right**) goes to the
+  bottom card, **Down** from the Impostazioni pill goes to the top card. Up/Down move between
+  cards; Down from the last card or Left goes back to the last dock app, Up from the first
+  card to the Impostazioni pill. **OK** switches the TV to that input.
 - **Ingressi** opens a list of HDMI 1–3, AV and Live TV. A green dot means a device is
   connected. It switches through Android's TV input framework, the same as the remote's
   Input button.
