@@ -74,7 +74,7 @@ To undo everything at once: `./restore.sh`
 
 Black screen with a greeting, a thin clock and the date (Outfit typeface, SIL Open Font
 License, `launcher/app/src/main/assets/fonts/OFL.txt`); Ingressi / Wi-Fi / Impostazioni
-pills top right; your four dock apps in a rounded band at the bottom, with the focused app's
+pills top right; three HDMI source cards under them (see "HDMI source cards"); your four dock apps in a rounded band at the bottom, with the focused app's
 name above them in a glow coloured from its banner; all other apps in a 4-column grid below
 (press Down).
 
@@ -83,6 +83,8 @@ Remote:
   goes to the first grid row, same column.
 - **Left / Right** stop at the end of a row.
 - **Back** from the grid jumps to the dock. **Home** on the home screen also goes to the dock.
+- **Right** from the last dock app moves to the source cards (Up/Down between them, Left back
+  to the dock, Up from the first one to the pills). **OK** switches the TV to that input.
 - **Ingressi** opens a list of HDMI 1–3, AV and Live TV. A green dot means a device is
   connected. It switches through Android's TV input framework, the same as the remote's
   Input button.
@@ -101,6 +103,21 @@ The Wi-Fi pill says "Wi-Fi" rather than the network name. Android 11 only shows 
 apps while Location is on. On this TV, turning Location on brings up Google's "location
 accuracy" consent screen, and saying no switches Location off again. If you ever accept it,
 the pill shows the network name automatically.
+
+### HDMI source cards
+
+Three cards on the right, top to bottom: **Nintendo Switch (HDMI 1)**, **PS5 (HDMI 2)**,
+**Windows 11 PC (HDMI 3)**. OK on a card switches the TV to that input, the same way the
+Ingressi list and the remote's Input button do. A card is in colour with a green dot while
+the device on that port is on, and grey and dimmed with a grey dot when it is off or
+unplugged. It updates on its own through Android's TV input callback (no polling): "on" is
+`TvInputManager.INPUT_STATE_CONNECTED`, "off" is standby or disconnected.
+
+The card to port mapping is the `SOURCES` array at the top of `HomeActivity.java` (label,
+HDMI port number, image). The port number is the position in the TV's HDMI list, so if you
+move a cable, change that number. The images are in `launcher/app/src/main/assets/sources/`
+(`ps5.jpg`, `switch.webp`, `pc.jpg`); replace a file to change a card's picture. They are
+the manufacturers' logos, used here only to label the inputs on a private home screen.
 
 ### Changing the dock apps or their order
 
@@ -135,6 +152,15 @@ It is dimmed so text stays readable. Remove it with
 `./install.sh` (needs the Android SDK at `%LOCALAPPDATA%\Android\Sdk` and JDK 17+).
 It pushes the APK and runs `pm install -r` over the shell, then sets it as home.
 `./install.sh <ip:5555> --no-build` reinstalls the last build.
+
+Without the Windows toolchain (Linux, no JDK or SDK installed) the build also works inside a
+`eclipse-temurin:17-jdk` container: install the command-line tools, `platforms;android-34`
+and `build-tools;34.0.0` into a cache volume, point `sdk.dir` at it in a copy of `launcher/`
+and run `./gradlew assembleDebug`. Keep the debug keystore (`ANDROID_USER_HOME`) in that
+volume: an APK signed with a different debug key can't be installed over the one on the TV
+(`INSTALL_FAILED_UPDATE_INCOMPATIBLE`), and the only way round is `adb uninstall`, which also
+deletes `dock.txt` and `wallpaper.jpg` from `/sdcard/Android/data/com.sev.atvhome/files/`
+(back them up first).
 
 To go back to the stock launcher: `adb shell pm enable com.google.android.tvlauncher`.
 The stock launcher declares a higher HOME priority, so it takes over again as soon as

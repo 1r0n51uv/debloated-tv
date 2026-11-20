@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
@@ -48,6 +50,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,12 +70,16 @@ import java.util.concurrent.Executors;
  */
 public class HomeActivity extends Activity {
 
-    private static final int ZONE_TOP = 0, ZONE_DOCK = 1, ZONE_GRID = 2, ZONE_MENU = 3;
+    private static final int ZONE_TOP = 0, ZONE_DOCK = 1, ZONE_GRID = 2, ZONE_MENU = 3, ZONE_SRC = 4;
     private static final int COLUMNS = 4;
     private static final int PILL_INPUTS = 0, PILL_WIFI = 1, PILL_SETTINGS = 2;
     private static final float TILE_SCALE = 1.1f, MOVE_SCALE = 1.18f;
     private static final int DOCK_MAX = 4;
     private static final long LONG_PRESS_MS = 550;
+    /** HDMI quick-access cards on the right: label, HDMI port number, image in assets/sources. */
+    private static final String[][] SOURCES = {
+            {"Switch", "1", "switch.webp"}, {"PS5", "2", "ps5.jpg"}, {"PC", "3", "pc.jpg"}};
+    private static final ColorMatrixColorFilter GRAYSCALE = grayscale();
 
     private final Handler main = new Handler(Looper.getMainLooper());
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
@@ -88,6 +95,10 @@ public class HomeActivity extends Activity {
     private View wallpaperDim;
     private final View[] pills = new View[3];
     private TextView wifiText;
+    private LinearLayout sourcesView;
+    private final View[] srcTiles = new View[SOURCES.length];
+    private TvInputManager tvInputs;
+    private TvInputManager.TvInputCallback inputCallback;
 
     private Typeface fontThin, fontLight, fontRegular;
     private SharedPreferences prefs;
@@ -98,7 +109,7 @@ public class HomeActivity extends Activity {
     private int menuReturnZone = ZONE_TOP, menuHeaderCount;
     private boolean menuClosesOnUp, moving, okDown, okLongHandled;
 
-    private int zone = ZONE_DOCK, topIdx = PILL_INPUTS, dockIdx, gridIdx, menuIdx;
+    private int zone = ZONE_DOCK, topIdx = PILL_INPUTS, dockIdx, gridIdx, menuIdx, srcIdx;
     private String savedGridPackage;
     private View focusedTile;
     private boolean resumed, appsLoaded;
@@ -154,6 +165,8 @@ public class HomeActivity extends Activity {
         setupPill(PILL_SETTINGS, R.id.pill_settings, R.drawable.ic_settings, getString(R.string.settings));
         wifiText = pills[PILL_WIFI].findViewById(R.id.pill_text);
 
+        setupSources();
+
         adapter = new TileAdapter(fontRegular);
         grid.setLayoutManager(new GridLayoutManager(this, COLUMNS));
         grid.setItemAnimator(null);
@@ -204,6 +217,16 @@ public class HomeActivity extends Activity {
         };
         connectivity.registerDefaultNetworkCallback(networkCallback);
         updateNetworkPill();
+
+        // Source cards follow the TV input framework's connected state
+        inputCallback = new TvInputManager.TvInputCallback() {
+            @Override
+            public void onInputStateChanged(@NonNull String inputId, int state) {
+                main.post(HomeActivity.this::updateSources);
+            }
+        };
+        if (tvInputs != null) tvInputs.registerCallback(inputCallback, main);
+        updateSources();
     }
 
     @Override
@@ -231,6 +254,8 @@ public class HomeActivity extends Activity {
         unregisterReceiver(clockReceiver);
         if (networkCallback != null) connectivity.unregisterNetworkCallback(networkCallback);
         networkCallback = null;
+        if (tvInputs != null && inputCallback != null) tvInputs.unregisterCallback(inputCallback);
+        inputCallback = null;
         closeMenu();
     }
 
@@ -383,12 +408,22 @@ public class HomeActivity extends Activity {
                 break;
             case ZONE_DOCK:
                 if (code == KeyEvent.KEYCODE_DPAD_LEFT && dockIdx > 0) dockIdx--;
-                else if (code == KeyEvent.KEYCODE_DPAD_RIGHT && dockIdx < dockApps.size() - 1) dockIdx++;
+                else if (code == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                    if (dockIdx < dockApps.size() - 1) dockIdx++;
+                    else zone = ZONE_SRC;
+                }
                 else if (code == KeyEvent.KEYCODE_DPAD_UP) zone = ZONE_TOP;
                 else if (code == KeyEvent.KEYCODE_DPAD_DOWN && !gridApps.isEmpty()) {
                     zone = ZONE_GRID;
                     gridIdx = Math.min(dockIdx, gridApps.size() - 1);   // first row, same column
                 }
+                break;
+            case ZONE_SRC:
+                if (code == KeyEvent.KEYCODE_DPAD_UP) {
+                    if (srcIdx > 0) srcIdx--;
+                    else { zone = ZONE_TOP; topIdx = PILL_SETTINGS; }
+                } else if (code == KeyEvent.KEYCODE_DPAD_DOWN && srcIdx < SOURCES.length - 1) srcIdx++;
+                else if (code == KeyEvent.KEYCODE_DPAD_LEFT && !dockApps.isEmpty()) zone = ZONE_DOCK;
                 break;
             case ZONE_GRID: {
                 int col = gridIdx % COLUMNS, row = gridIdx / COLUMNS;
@@ -421,7 +456,8 @@ public class HomeActivity extends Activity {
     }
 
     private int index() {
-        return zone == ZONE_TOP ? topIdx : zone == ZONE_DOCK ? dockIdx : zone == ZONE_GRID ? gridIdx : menuIdx;
+        return zone == ZONE_TOP ? topIdx : zone == ZONE_DOCK ? dockIdx : zone == ZONE_GRID ? gridIdx
+                : zone == ZONE_SRC ? srcIdx : menuIdx;
     }
 
     private void select() {
@@ -443,6 +479,9 @@ public class HomeActivity extends Activity {
                 break;
             case ZONE_GRID:
                 if (!gridApps.isEmpty()) launch(gridApps.get(gridIdx));
+                break;
+            case ZONE_SRC:
+                switchSource(srcIdx);
                 break;
             case ZONE_MENU:
                 if (menuIdx < menuItems.size() && menuItems.get(menuIdx).enabled) {
@@ -466,7 +505,7 @@ public class HomeActivity extends Activity {
     private void back() {
         if (moving) finishMove();
         else if (zone == ZONE_MENU) closeMenu();
-        else if (zone == ZONE_GRID && !dockApps.isEmpty()) {
+        else if ((zone == ZONE_GRID || zone == ZONE_SRC) && !dockApps.isEmpty()) {
             zone = ZONE_DOCK;
             applyFocus(true);
         }
@@ -495,6 +534,8 @@ public class HomeActivity extends Activity {
         } else if (z == ZONE_GRID) {
             RecyclerView.LayoutManager lm = grid.getLayoutManager();
             tile = lm == null ? null : lm.findViewByPosition(gridIdx);
+        } else if (z == ZONE_SRC) {
+            tile = srcTiles[srcIdx];
         }
         float scale = moving ? MOVE_SCALE : TILE_SCALE;
 
@@ -609,6 +650,83 @@ public class HomeActivity extends Activity {
         topIdx = clamp(prefs.getInt("top", PILL_INPUTS), 0, pills.length - 1);
         dockIdx = prefs.getInt("dock", 0);
         savedGridPackage = prefs.getString("grid", null);
+    }
+
+    // ---------------------------------------------------------------- sources
+
+    private static ColorMatrixColorFilter grayscale() {
+        ColorMatrix m = new ColorMatrix();
+        m.setSaturation(0f);
+        return new ColorMatrixColorFilter(m);
+    }
+
+    private void setupSources() {
+        tvInputs = getSystemService(TvInputManager.class);
+        sourcesView = findViewById(R.id.sources);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (int i = 0; i < SOURCES.length; i++) {
+            View tile = inflater.inflate(R.layout.item_source, sourcesView, false);
+            tile.findViewById(R.id.card).setClipToOutline(true);
+            ((ImageView) tile.findViewById(R.id.banner)).setImageBitmap(loadSourceImage(SOURCES[i][2]));
+            TextView port = tile.findViewById(R.id.port);
+            port.setTypeface(fontRegular);
+            port.setText("HDMI " + SOURCES[i][1]);
+            sourcesView.addView(tile);
+            srcTiles[i] = tile;
+        }
+        updateSources();
+    }
+
+    /** Decodes an asset at roughly card size; the originals are far bigger than the TV needs. */
+    private Bitmap loadSourceImage(String file) {
+        try {
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            try (InputStream in = getAssets().open("sources/" + file)) {
+                BitmapFactory.decodeStream(in, null, o);
+            }
+            o.inJustDecodeBounds = false;
+            o.inSampleSize = Math.max(1, Integer.highestOneBit(Math.max(1, o.outWidth / Math.round(150 * dp))));
+            try (InputStream in = getAssets().open("sources/" + file)) {
+                return BitmapFactory.decodeStream(in, null, o);
+            }
+        } catch (IOException ex) {
+            return null;
+        }
+    }
+
+    /** HDMI 1..3 as the TV input framework lists them (physical ports, not CEC children). */
+    private String hdmiInputId(int port) {
+        if (tvInputs == null) return null;
+        List<TvInputInfo> hdmi = new ArrayList<>();
+        for (TvInputInfo i : tvInputs.getTvInputList()) {
+            if (i.getType() == TvInputInfo.TYPE_HDMI && i.getParentId() == null && !i.isHidden(this)) hdmi.add(i);
+        }
+        hdmi.sort((a, b) -> label(a).compareTo(label(b)));
+        return port >= 1 && port <= hdmi.size() ? hdmi.get(port - 1).getId() : null;
+    }
+
+    /** Colour + green dot while the input is connected and on; grey and dim otherwise. */
+    private void updateSources() {
+        for (int i = 0; i < SOURCES.length; i++) {
+            String id = hdmiInputId(Integer.parseInt(SOURCES[i][1]));
+            boolean active = id != null && tvInputs.getInputState(id) == TvInputManager.INPUT_STATE_CONNECTED;
+            ImageView img = srcTiles[i].findViewById(R.id.banner);
+            img.setColorFilter(active ? null : GRAYSCALE);
+            img.setAlpha(active ? 1f : 0.4f);
+            srcTiles[i].findViewById(R.id.dot).getBackground()
+                    .setTint(active ? 0xFF34C759 : 0x59FFFFFF);
+            srcTiles[i].findViewById(R.id.port).setAlpha(active ? 1f : 0.6f);
+        }
+    }
+
+    private void switchSource(int index) {
+        String id = hdmiInputId(Integer.parseInt(SOURCES[index][1]));
+        if (id == null) {
+            Toast.makeText(this, "HDMI " + SOURCES[index][1] + " non disponibile", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        safeStart(new Intent(Intent.ACTION_VIEW, TvContract.buildChannelUriForPassthroughInput(id)));
     }
 
     // ---------------------------------------------------------------- top bar
