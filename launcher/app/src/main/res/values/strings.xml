@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Home</string>
+    <string name="inputs">Ingressi</string>
+    <string name="settings">Impostazioni</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="ethernet">Ethernet</string>
+    <string name="offline">Non connesso</string>
+    <string name="all_apps">App</string>
+    <string name="live_tv">Live TV</string>
+    <string name="greet_morning">Buongiorno</string>
+    <string name="greet_afternoon">Buon pomeriggio</string>
+    <string name="greet_evening">Buonasera</string>
+    <string name="menu_move">Sposta</string>
+    <string name="menu_remove_dock">Rimuovi dalla barra</string>
+    <string name="menu_add_dock">Aggiungi alla barra</string>
+    <string name="menu_dock_full">Barra piena (max 4)</string>
+    <string name="menu_info">Info app</string>
+    <string name="menu_uninstall">Disinstalla</string>
+    <string name="move_hint">◀ ▶  sposta   ·   OK  fatto</string>
+</resources>

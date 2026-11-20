@@ -1,0 +1,2 @@
+com.netflix.ninja
+com.amazon.amazonvideo.livingroom

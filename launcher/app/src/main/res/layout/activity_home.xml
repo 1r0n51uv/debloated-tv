@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- Optional wallpaper (files/wallpaper.jpg), dimmed. Gone when the file is absent. -->
+    <ImageView
+        android:id="@+id/wallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/wallpaper_dim"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A6000000"
+        android:visibility="gone" />
+
+    <!-- All key handling is done in HomeActivity; nothing in here takes focus. -->
+    <ScrollView
+        android:id="@+id/scroller"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:descendantFocusability="blocksDescendants"
+        android:focusable="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <FrameLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipChildren="false">
+
+            <!-- The one glass highlight: a plate drawn behind the focused tile/pill, a little
+                 larger than it, so it reads on white and black banners alike -->
+            <com.sev.atvhome.GlassHighlight
+                android:id="@+id/highlight"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/column"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipChildren="false"
+                android:orientation="vertical">
+
+                <!-- First screen: top bar, hero title, dock. Height set to the screen height in code. -->
+                <FrameLayout
+                    android:id="@+id/hero"
+                    android:layout_width="match_parent"
+                    android:layout_height="540dp"
+                    android:clipChildren="false">
+
+                    <com.sev.atvhome.GlowView
+                        android:id="@+id/glow"
+                        android:layout_width="980dp"
+                        android:layout_height="420dp"
+                        android:layout_gravity="bottom|start"
+                        android:layout_marginStart="-220dp"
+                        android:layout_marginBottom="70dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="64dp"
+                        android:layout_marginTop="34dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/greeting"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#B3FFFFFF"
+                            android:textSize="17sp" />
+
+                        <TextView
+                            android:id="@+id/clock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="-6dp"
+                            android:includeFontPadding="false"
+                            android:textColor="#FFFFFF"
+                            android:textSize="76sp" />
+
+                        <TextView
+                            android:id="@+id/date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:textColor="#8CFFFFFF"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/pills"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="top|end"
+                        android:layout_marginTop="44dp"
+                        android:layout_marginEnd="56dp"
+                        android:clipChildren="false"
+                        android:orientation="horizontal">
+
+                        <include android:id="@+id/pill_inputs" layout="@layout/pill" />
+                        <include android:id="@+id/pill_wifi" layout="@layout/pill" />
+                        <include android:id="@+id/pill_settings" layout="@layout/pill" />
+                    </LinearLayout>
+
+                    <!-- Shown only while moving a dock app -->
+                    <TextView
+                        android:id="@+id/hero_hint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|start"
+                        android:layout_marginStart="86dp"
+                        android:layout_marginBottom="288dp"
+                        android:alpha="0"
+                        android:text="@string/move_hint"
+                        android:textColor="#B3FFFFFF"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/hero_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|start"
+                        android:layout_marginStart="84dp"
+                        android:layout_marginBottom="212dp"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="#F2FFFFFF"
+                        android:textSize="52sp" />
+
+                    <LinearLayout
+                        android:id="@+id/dock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginBottom="34dp"
+                        android:background="@drawable/dock_band"
+                        android:clipChildren="false"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        android:paddingStart="26dp"
+                        android:paddingTop="24dp"
+                        android:paddingEnd="26dp"
+                        android:paddingBottom="24dp" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/grid_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="84dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/all_apps"
+                    android:textColor="#8CFFFFFF"
+                    android:textSize="18sp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/grid"
+                    android:layout_width="816dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:focusable="false"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never" />
+
+                <!-- Room so the last grid row can scroll up to the same place as the others -->
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="420dp" />
+            </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
+
+    <!-- Popup menu (Inputs list, app actions), positioned next to its tile/pill in code -->
+    <LinearLayout
+        android:id="@+id/popup"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/menu_bg"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:visibility="gone" />
+</FrameLayout>

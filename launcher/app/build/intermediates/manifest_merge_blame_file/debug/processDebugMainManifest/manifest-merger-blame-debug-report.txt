@@ -1,0 +1,134 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.sev.atvhome"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="30"
+9        android:targetSdkVersion="34" />
+10
+11    <!-- Wi-Fi pill shows the network name; Android 11 only reveals the SSID with location -->
+12    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+12-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:5:5-76
+12-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:5:22-73
+13    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+13-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:6:5-79
+13-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:6:22-76
+14    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+14-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:7:5-79
+14-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:7:22-76
+15    <!-- Uninstall from the app menu (the system still asks to confirm) -->
+16    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+16-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:9:5-82
+16-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:9:22-79
+17
+18    <uses-feature
+18-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:11:5-87
+19        android:name="android.software.leanback"
+19-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:11:19-59
+20        android:required="false" />
+20-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:11:60-84
+21    <uses-feature
+21-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:12:5-90
+22        android:name="android.hardware.touchscreen"
+22-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:12:19-62
+23        android:required="false" />
+23-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:12:63-87
+24    <uses-feature
+24-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:13:5-86
+25        android:name="android.software.live_tv"
+25-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:13:19-58
+26        android:required="false" />
+26-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:13:59-83
+27
+28    <!-- Without these, package visibility (API 30+) hides every app and the grid is empty -->
+29    <queries>
+29-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:16:5-28:15
+30        <intent>
+30-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:17:9-20:18
+31            <action android:name="android.intent.action.MAIN" />
+31-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:18:13-65
+31-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:18:21-62
+32
+33            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+33-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:19:13-82
+33-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:19:23-79
+34        </intent>
+35        <intent>
+35-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:21:9-24:18
+36            <action android:name="android.intent.action.MAIN" />
+36-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:18:13-65
+36-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:18:21-62
+37
+38            <category android:name="android.intent.category.LAUNCHER" />
+38-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:23:13-73
+38-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:23:23-70
+39        </intent>
+40        <intent>
+40-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:25:9-27:18
+41            <action android:name="android.media.tv.TvInputService" />
+41-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:26:13-70
+41-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:26:21-67
+42        </intent>
+43    </queries>
+44
+45    <application
+45-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:30:5-56:19
+46        android:allowBackup="false"
+46-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:31:9-36
+47        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+47-->[androidx.core:core:1.7.0] C:\Users\SeverinoAmmirati\.gradle\caches\8.9\transforms\4808a3cf9ccd8a3867b5e02169a315a8\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
+48        android:banner="@drawable/banner"
+48-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:32:9-42
+49        android:debuggable="true"
+50        android:extractNativeLibs="false"
+51        android:icon="@drawable/banner"
+51-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:33:9-40
+52        android:label="@string/app_name"
+52-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:34:9-41
+53        android:largeHeap="false"
+53-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:35:9-34
+54        android:supportsRtl="false"
+54-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:36:9-36
+55        android:theme="@style/Theme.AtvHome" >
+55-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:37:9-45
+56        <activity
+56-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:39:9-55:20
+57            android:name="com.sev.atvhome.HomeActivity"
+57-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:40:13-41
+58            android:clearTaskOnLaunch="true"
+58-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:41:13-45
+59            android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|density|fontScale|locale|layoutDirection"
+59-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:42:13-174
+60            android:excludeFromRecents="true"
+60-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:43:13-46
+61            android:exported="true"
+61-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:44:13-36
+62            android:launchMode="singleTask"
+62-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:45:13-44
+63            android:resumeWhilePausing="true"
+63-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:46:13-46
+64            android:screenOrientation="landscape"
+64-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:47:13-50
+65            android:stateNotNeeded="true"
+65-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:48:13-42
+66            android:windowSoftInputMode="adjustNothing" >
+66-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:49:13-56
+67            <intent-filter>
+67-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:50:13-54:29
+68                <action android:name="android.intent.action.MAIN" />
+68-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:18:13-65
+68-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:18:21-62
+69
+70                <category android:name="android.intent.category.HOME" />
+70-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:52:17-73
+70-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:52:27-70
+71                <category android:name="android.intent.category.DEFAULT" />
+71-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:53:17-76
+71-->C:\Users\SeverinoAmmirati\source\repos\debloat\launcher\app\src\main\AndroidManifest.xml:53:27-73
+72            </intent-filter>
+73        </activity>
+74    </application>
+75
+76</manifest>

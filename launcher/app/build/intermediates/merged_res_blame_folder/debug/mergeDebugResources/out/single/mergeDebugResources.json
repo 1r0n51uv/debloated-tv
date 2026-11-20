@@ -1,0 +1,54 @@
+[
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_ic_settings.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\ic_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_ic_wifi.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\ic_wifi.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_banner.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\banner.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_tile_bg.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\tile_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_dock_band.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\dock_band.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\layout_activity_home.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\layout\\activity_home.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_menu_item_focused.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\menu_item_focused.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_menu_bg.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\menu_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_pill_bg.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\pill_bg.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\layout_pill.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\layout\\pill.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\drawable_ic_input.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\drawable\\ic_input.xml"
+    },
+    {
+        "merged": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-debug-10:\\layout_item_tile.xml.flat",
+        "source": "C:\\Users\\SeverinoAmmirati\\.gradle\\daemon\\8.9\\com.sev.atvhome.app-main-12:\\layout\\item_tile.xml"
+    },
+    {
+        "merged": "com.sev.atvhome.app-debug-10:/layout_activity_home.xml.flat",
+        "source": "com.sev.atvhome.app-main-12:/layout/activity_home.xml"
+    }
+]

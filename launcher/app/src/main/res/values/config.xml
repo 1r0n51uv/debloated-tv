@@ -1,0 +1,10 @@
+<resources>
+    <!-- Dock apps, left to right. Override without rebuilding: push one package per line to
+         /sdcard/Android/data/com.sev.atvhome/files/dock.txt (see README). -->
+    <string-array name="dock_packages">
+        <item>com.google.android.youtube.tv</item>
+        <item>tv.pluto.android</item>
+        <item>com.ir0.iptv</item>
+        <item>com.spotify.tv.android</item>
+    </string-array>
+</resources>
